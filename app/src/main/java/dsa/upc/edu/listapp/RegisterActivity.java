@@ -16,7 +16,7 @@ import retrofit2.Response;
 
 public class RegisterActivity extends AppCompatActivity {
 
-    private EditText etUsername, etNom, etCognom1, etCognom2, etEmail, etPassword, etDataNaixement;
+    private EditText etUsername, etNom, etEmail, etPassword;
     private Button btnRegister;
 
     private EETACBROSSystemService system;
@@ -28,28 +28,20 @@ public class RegisterActivity extends AppCompatActivity {
 
         etUsername = findViewById(R.id.etUsername);
         etNom = findViewById(R.id.etNom);
-        etCognom1 = findViewById(R.id.etCognom1);
-        etCognom2 = findViewById(R.id.etCognom2);
         etEmail = findViewById(R.id.etEmail);
         etPassword = findViewById(R.id.etPassword);
-        etDataNaixement = findViewById(R.id.etDataNaixement);
         btnRegister = findViewById(R.id.btnRegister);
 
         btnRegister.setOnClickListener(v -> registerUser());
     }
 
     private void registerUser() {
-//        RegisterRequest request = new RegisterRequest(
-//                etUsername.getText().toString(),
-//                etNom.getText().toString(),
-//                etCognom1.getText().toString(),
-//                etCognom2.getText().toString(),
-//                etEmail.getText().toString(),
-//                etPassword.getText().toString(),
-//                etDataNaixement.getText().toString()
-//        );
-
-        RegisterRequest request = new RegisterRequest("username","manel","colominas","Ruiz","manelcolominas@gmail.com","111111111","11/02/2003");
+        RegisterRequest request = new RegisterRequest(
+                etUsername.getText().toString(),
+                etNom.getText().toString(),
+                etEmail.getText().toString(),
+                etPassword.getText().toString()
+        );
 
         EETACBROSSystemService api = API.getGithub();
 

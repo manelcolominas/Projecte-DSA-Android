@@ -22,18 +22,6 @@
             android:layout_height="wrap_content"/>
 
         <EditText
-            android:id="@+id/etCognom1"
-            android:hint="Primer cognom"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-
-        <EditText
-            android:id="@+id/etCognom2"
-            android:hint="Segon cognom"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-
-        <EditText
             android:id="@+id/etEmail"
             android:hint="Email"
             android:inputType="textEmailAddress"
@@ -44,12 +32,6 @@
             android:id="@+id/etPassword"
             android:hint="Contrasenya"
             android:inputType="textPassword"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-
-        <EditText
-            android:id="@+id/etDataNaixement"
-            android:hint="Data de naixement (YYYY-MM-DD)"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 
