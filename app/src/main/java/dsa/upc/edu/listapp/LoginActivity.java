@@ -7,17 +7,16 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import dsa.upc.edu.listapp.github.API;
-import dsa.upc.edu.listapp.github.RegisterRequest;
+import dsa.upc.edu.listapp.github.LoginRequest;
 import dsa.upc.edu.listapp.github.EETACBROSSystemService;
 import dsa.upc.edu.listapp.github.User;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class RegisterActivity extends AppCompatActivity {
-
-    private EditText etUsername, etNom, etEmail, etPassword;
-    private Button btnRegister;
+public class LoginActivity extends AppCompatActivity {
+    private EditText etUsername, etPassword;
+    private Button btnLogin;
 
     private EETACBROSSystemService system;
 
@@ -27,38 +26,33 @@ public class RegisterActivity extends AppCompatActivity {
         setContentView(R.layout.activity_register);
 
         etUsername = findViewById(R.id.etUsername);
-        etNom = findViewById(R.id.etNom);
-        etEmail = findViewById(R.id.etEmail);
         etPassword = findViewById(R.id.etPassword);
-        btnRegister = findViewById(R.id.btnLogin);
 
-        btnRegister.setOnClickListener(v -> registerUser());
+        btnLogin.setOnClickListener(v -> loginUser());
     }
 
-    private void registerUser() {
-        RegisterRequest request = new RegisterRequest(
+    private void loginUser() {
+        LoginRequest request = new LoginRequest(
                 etUsername.getText().toString(),
-                etNom.getText().toString(),
-                etEmail.getText().toString(),
                 etPassword.getText().toString()
         );
 
         EETACBROSSystemService api = API.getGithub();
 
-        api.registerUser(request).enqueue(new Callback<User>() {
+        api.loginUser(request).enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
                 if (response.isSuccessful()) {
-                    Toast.makeText(RegisterActivity.this, "Usuari registrat correctament!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, "Log in correcte!", Toast.LENGTH_SHORT).show();
                     finish();
                 } else {
-                    Toast.makeText(RegisterActivity.this, "Error en el registre", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, "Error en el log in", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<User> call, Throwable t) {
-                Toast.makeText(RegisterActivity.this, "Error de connexió: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(LoginActivity.this, "Error de connexió: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
 

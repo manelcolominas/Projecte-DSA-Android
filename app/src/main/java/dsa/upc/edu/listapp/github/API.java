@@ -12,7 +12,6 @@ public class API {
     //final static String URL = "http://10.0.2.2:8080/swagger/";
     final static String URL = "http://10.0.2.2:8080/example/";
 
-
     private static Retrofit retrofit;
     private static EETACBROSSystemService github;
 

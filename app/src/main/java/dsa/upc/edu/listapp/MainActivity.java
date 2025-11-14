@@ -7,6 +7,7 @@ import android.widget.Button;
 public class MainActivity extends AppCompatActivity {
 
     private Button btnGoToRegister;
+    private Button btnGoToLogin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -14,10 +15,16 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         btnGoToRegister = findViewById(R.id.btnGoToRegister);
+        btnGoToLogin = findViewById(R.id.btnGoToLogin);
 
         // Quan l’usuari fa clic, obrim la pantalla de registre
         btnGoToRegister.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, RegisterActivity.class);
+            startActivity(intent);
+        });
+
+        btnGoToLogin.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
             startActivity(intent);
         });
     }

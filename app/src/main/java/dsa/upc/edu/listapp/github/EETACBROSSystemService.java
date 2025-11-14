@@ -10,5 +10,8 @@ import retrofit2.http.Path;
 public interface EETACBROSSystemService {
     @POST("eetacbros/user/register")
     Call<User> registerUser(@Body RegisterRequest request);
+
+    @POST("eetacbros/user/login")
+    Call<User> loginUser(@Body LoginRequest request);
 }
 
