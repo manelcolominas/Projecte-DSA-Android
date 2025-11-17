@@ -7,6 +7,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import dsa.upc.edu.listapp.github.API;
 import dsa.upc.edu.listapp.github.RegisterRequest;
 import dsa.upc.edu.listapp.github.EETACBROSSystemService;
@@ -40,7 +43,17 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void registerUser() {
+        if (etUsername.getText().toString().isEmpty() || etName.getText().toString().isEmpty() ||
+                etEmail.getText().toString().isEmpty() || etPassword.getText().toString().isEmpty() ||
+                etRepeatPassword.getText().toString().isEmpty()) {
+            Toast.makeText(RegisterActivity.this, "All fields must be filled", Toast.LENGTH_SHORT).show();
+            return;
+        }
         if (!checkPassword(etPassword.getText().toString(), etRepeatPassword.getText().toString())) return;
+        if (!checkUsername(etUsername.getText().toString())) return;
+        if (!checkEmail(etEmail.getText().toString())) return;
+
+
         RegisterRequest request = new RegisterRequest(
                 etUsername.getText().toString(),
                 etName.getText().toString(),
@@ -82,8 +95,33 @@ public class RegisterActivity extends AppCompatActivity {
         }
         return true;
     }
+
+    private boolean checkUsername (String username) {
+        char firstChar = username.toCharArray()[0];
+        char lastChar = username.toCharArray()[username.length() - 1];
+        if (!((firstChar >= '0' && firstChar <= '9') || (firstChar >= 'A' && firstChar <= 'Z') || (firstChar >= 'a' && firstChar <= 'z'))) {
+            Toast.makeText(RegisterActivity.this, "Username must not start with a special character", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        else if (!((lastChar >= '0' && firstChar <= '9') || (lastChar >= 'A' && lastChar <= 'Z') || (lastChar >= 'a' && lastChar <= 'z'))) {
+            Toast.makeText(RegisterActivity.this, "Username must not end with a special character", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        return true;
+    }
+
     private boolean checkEmail (String email) {
-        
+        String regex = "^(([^<>()[\\\\]\\\\.,;:\\s@\"]+(\\.[^<>()[\\\\]\\\\.,;:\\s@\"]+)*)|(\".+\"))@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\])|(([a-zA-Z0-9\\-]+\\.)+[a-zA-Z]{2,}))$";
+
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(email);
+
+        if (!matcher.matches()) {
+            Toast.makeText(RegisterActivity.this, "Incorrect email format", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        return true;
     }
 
     private void goToLogin() {
