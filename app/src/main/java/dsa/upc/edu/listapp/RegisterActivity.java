@@ -17,7 +17,7 @@ import retrofit2.Response;
 
 public class RegisterActivity extends AppCompatActivity {
 
-    private EditText etUsername, etName, etEmail, etPassword;
+    private EditText etUsername, etName, etEmail, etPassword, etRepeatPassword;
     private Button btnRegister, btnGoToLogIn;
 
     private EETACBROSSystemService system;
@@ -31,15 +31,16 @@ public class RegisterActivity extends AppCompatActivity {
         etName = findViewById(R.id.etName);
         etEmail = findViewById(R.id.etEmail);
         etPassword = findViewById(R.id.etPassword);
+        etRepeatPassword = findViewById(R.id.etRepeatPassword);
         btnRegister = findViewById(R.id.btnRegister);
         btnGoToLogIn = findViewById(R.id.btnGoToLogIn);
-
 
         btnRegister.setOnClickListener(v -> registerUser());
         btnGoToLogIn.setOnClickListener(v -> goToLogin());
     }
 
     private void registerUser() {
+        if (!checkPassword(etPassword.getText().toString(), etRepeatPassword.getText().toString())) return;
         RegisterRequest request = new RegisterRequest(
                 etUsername.getText().toString(),
                 etName.getText().toString(),
@@ -65,6 +66,24 @@ public class RegisterActivity extends AppCompatActivity {
                 Toast.makeText(RegisterActivity.this, "Error de connexió: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private boolean checkPassword(String password, String repeatPassword) {
+        if (!password.equals(repeatPassword)) {
+            Toast.makeText(RegisterActivity.this, "Passwords do not match", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        else if (password.length() < 6) {
+            Toast.makeText(RegisterActivity.this, "Password must have at minimum 6 characters", Toast.LENGTH_SHORT).show();
+            return false;
+        } else if(!password.matches(".*[A-Z].*") || !password.matches(".*[a-z].*") || !password.matches(".*[0-9].*")) {
+            Toast.makeText(RegisterActivity.this, "Password must have at minimum a lower case letter, an upper case letter and a number", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        return true;
+    }
+    private boolean checkEmail (String email) {
+        
     }
 
     private void goToLogin() {
