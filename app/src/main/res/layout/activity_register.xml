@@ -14,53 +14,61 @@
             android:id="@+id/etUsername"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Username" />
+            android:hint="Username"
+            android:fontFamily="@font/kongtext" />
 
         <EditText
             android:id="@+id/etName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Name" />
+            android:hint="Name"
+            android:fontFamily="@font/kongtext" />
 
         <EditText
             android:id="@+id/etEmail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Email"
-            android:inputType="textEmailAddress" />
+            android:inputType="textEmailAddress"
+            android:fontFamily="@font/kongtext" />
 
         <EditText
             android:id="@+id/etPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Password"
-            android:inputType="textPassword" />
+            android:inputType="textPassword"
+            android:fontFamily="@font/kongtext" />
 
         <EditText
             android:id="@+id/etRepeatPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Repeat Password"
-            android:inputType="textPassword" />
+            android:inputType="textPassword"
+            android:fontFamily="@font/kongtext" />
 
         <Button
             android:id="@+id/btnRegister"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="Registrar" />
+            android:text="Registrar"
+            android:fontFamily="@font/kongtext" />
 
         <TextView
             android:id="@+id/txtLogin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="60dp"
-            android:text="Already have an account?" />
+            android:text="Already have an account?"
+            android:fontFamily="@font/kongtext" />
 
         <Button
             android:id="@+id/btnGoToLogIn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Log in" />
+            android:text="Log in"
+            android:fontFamily="@font/kongtext" />
     </LinearLayout>
 </ScrollView>

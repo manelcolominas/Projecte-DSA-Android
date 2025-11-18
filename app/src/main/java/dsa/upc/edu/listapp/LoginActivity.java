@@ -1,6 +1,7 @@
 package dsa.upc.edu.listapp;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.Button;
@@ -21,10 +22,14 @@ public class LoginActivity extends AppCompatActivity {
 
     private EETACBROSSystemService system;
 
+    private SharedPreferences prefs;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        prefs = getSharedPreferences("EETACBORSPreferences", MODE_PRIVATE);
 
         etUsername = findViewById(R.id.etUsername);
         etPassword = findViewById(R.id.etPassword);
@@ -34,6 +39,10 @@ public class LoginActivity extends AppCompatActivity {
 
         btnLogin.setOnClickListener(v -> loginUser());
         btnGoToRegister.setOnClickListener(v -> goToRegister());
+
+        if (prefs.getBoolean("isLoggedIn", false)) {
+            Toast.makeText(LoginActivity.this, "Already logged in", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void loginUser() {
@@ -48,13 +57,12 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
                 if (response.isSuccessful()) {
+                    prefs.edit().putBoolean("isLoggedIn", true).apply();
                     Toast.makeText(LoginActivity.this, "Logged in successfully!", Toast.LENGTH_SHORT).show();
-                    finish();
                 } else if (response.code() == 404){
                     Toast.makeText(LoginActivity.this, "User not found", Toast.LENGTH_SHORT).show();
                 } else if (response.code() == 400) {
                     Toast.makeText(LoginActivity.this, "Wrong password", Toast.LENGTH_SHORT).show();
-
                 }
             }
 

@@ -13,21 +13,24 @@
             android:id="@+id/etUsername"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Usuari" />
+            android:hint="Usuari"
+            android:fontFamily="@font/kongtext" />
 
         <EditText
             android:id="@+id/etPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Contrasenya"
-            android:inputType="textPassword" />
+            android:inputType="textPassword"
+            android:fontFamily="@font/kongtext" />
 
         <Button
             android:id="@+id/btnLogin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="Log in" />
+            android:text="Log in"
+            android:fontFamily="@font/kongtext" />
 
         <TextView
             android:id="@+id/txtRegister"
@@ -39,13 +42,15 @@
             android:textAllCaps="false"
             android:textColor="#80000000"
             android:textColorLink="#000000"
-            android:textIsSelectable="false" />
+            android:textIsSelectable="false"
+            android:fontFamily="@font/kongtext" />
 
         <Button
             android:id="@+id/btnGoToRegister"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="Register" />
+            android:text="Register"
+            android:fontFamily="@font/kongtext" />
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>

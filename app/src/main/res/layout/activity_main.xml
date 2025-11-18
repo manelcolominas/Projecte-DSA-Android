@@ -10,12 +10,14 @@
         android:id="@+id/btnGoToRegister"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Register" />
+        android:text="Register"
+        android:fontFamily="@font/kongtext" />
 
     <Button
         android:id="@+id/btnGoToLogin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Log in" />
+        android:text="Log in"
+        android:fontFamily="@font/kongtext" />
 
 </LinearLayout>
