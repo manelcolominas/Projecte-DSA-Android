@@ -71,4 +71,5 @@
             android:text="Log in"
             android:fontFamily="@font/kongtext" />
     </LinearLayout>
+
 </ScrollView>
