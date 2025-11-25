@@ -31,6 +31,11 @@ public class LoginActivity extends AppCompatActivity {
 
         prefs = getSharedPreferences("EETACBORSPreferences", MODE_PRIVATE);
 
+        if (prefs.getBoolean("isLoggedIn", false)) {
+            goToShop();
+            return;
+        }
+
         etUsername = findViewById(R.id.etUsername);
         etPassword = findViewById(R.id.etPassword);
         btnLogin = findViewById(R.id.btnLogin);
@@ -39,10 +44,6 @@ public class LoginActivity extends AppCompatActivity {
 
         btnLogin.setOnClickListener(v -> loginUser());
         btnGoToRegister.setOnClickListener(v -> goToRegister());
-
-        if (prefs.getBoolean("isLoggedIn", false)) {
-            Toast.makeText(LoginActivity.this, "Already logged in", Toast.LENGTH_SHORT).show();
-        }
     }
 
     private void loginUser() {
@@ -62,6 +63,7 @@ public class LoginActivity extends AppCompatActivity {
                     editor.putBoolean("isLoggedIn", true);
                     if (user != null) {
                         editor.putInt("userId", user.id);
+                        editor.putString("username", user.username);
                     }
                     editor.apply();
 
@@ -90,7 +92,9 @@ public class LoginActivity extends AppCompatActivity {
 
     private void goToShop() {
         Intent intent = new Intent(LoginActivity.this, ShopActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
+        finish();
     }
 
 
