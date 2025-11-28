@@ -71,8 +71,9 @@ public class ShopActivity extends AppCompatActivity {
     }
 
     private void logOut() {
+        SharedPreferences prefs = getSharedPreferences("EETACBROSPreferences", MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
-        editor.clear();
+        editor.putBoolean("isLoggedIn", false);
         editor.apply();
 
         Intent intent = new Intent(ShopActivity.this, LoginActivity.class);
