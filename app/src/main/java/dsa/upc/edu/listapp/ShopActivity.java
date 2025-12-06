@@ -73,7 +73,7 @@ public class ShopActivity extends AppCompatActivity {
 
     private void logOut() {
         SharedPreferences.Editor editor = prefs.edit();
-        editor.putBoolean("isLoggedIn", false);
+        editor.putInt("userId", -1);
         editor.commit();
 
         Intent intent = new Intent(ShopActivity.this, LoginActivity.class);

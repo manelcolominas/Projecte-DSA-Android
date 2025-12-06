@@ -60,7 +60,6 @@ public class LoginActivity extends AppCompatActivity {
                 if (response.isSuccessful()) {
                     User user = response.body();
                     SharedPreferences.Editor editor = prefs.edit();
-                    editor.putBoolean("isLoggedIn", true);
                     if (user != null) {
                         editor.putInt("userId", user.id);
                         editor.putString("username", user.username);

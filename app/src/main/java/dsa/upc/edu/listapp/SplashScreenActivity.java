@@ -12,7 +12,8 @@ public class SplashScreenActivity extends AppCompatActivity {
 
 
     private SharedPreferences prefs;
-    private boolean isLoggedIn;
+    //private boolean isLoggedIn;
+    private Integer userId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,8 +21,8 @@ public class SplashScreenActivity extends AppCompatActivity {
         setContentView(R.layout.activity_splash_screen);
 
         prefs = getSharedPreferences("EETACBROSPreferences", MODE_PRIVATE);
-        isLoggedIn = prefs.getBoolean("isLoggedIn", false);
-        if (isLoggedIn) {
+        userId = prefs.getInt("userId",-1);
+        if (userId != -1) {
             Toast.makeText(SplashScreenActivity.this, "Already logged in", Toast.LENGTH_SHORT).show();
         }
 
@@ -34,7 +35,7 @@ public class SplashScreenActivity extends AppCompatActivity {
         handler.postDelayed(() ->
                 {
                     Intent intent = null;
-                    if (isLoggedIn) {
+                    if (userId != -1) {
                         goToShop();
                     }
                     else {
