@@ -74,6 +74,7 @@ public class ShopActivity extends AppCompatActivity {
     private void logOut() {
         SharedPreferences.Editor editor = prefs.edit();
         editor.putInt("userId", -1);
+        editor.putBoolean("isLoggedIn", false);
         editor.commit();
 
         Intent intent = new Intent(ShopActivity.this, LoginActivity.class);
@@ -243,11 +244,9 @@ public class ShopActivity extends AppCompatActivity {
         int totalCost = 0;
         for (Map.Entry<Integer, Integer> entry : cart.entrySet()) {
             Item item = findItemById(entry.getKey());
-            item.setQuantity(entry.getValue());
             if (item != null) {
-                for (int i = 0; i < entry.getValue(); i++) {
-                    itemsToBuy.add(item);
-                }
+                item.setQuantity(entry.getValue());
+                itemsToBuy.add(item);
                 totalCost += item.getPrice() * entry.getValue();
             }
         }

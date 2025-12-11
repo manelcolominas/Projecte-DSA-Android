@@ -68,6 +68,7 @@ public class LoginActivity extends AppCompatActivity {
                         editor.putString("password", user.password);
                         editor.putInt("coins", user.coins);
                     }
+                    editor.putBoolean("isLoggedIn", true);
                     editor.commit();
 
                     Toast.makeText(LoginActivity.this, "✅ Login successful! Redirecting...", Toast.LENGTH_SHORT).show();
