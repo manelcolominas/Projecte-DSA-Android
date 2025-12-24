@@ -85,6 +85,13 @@
                         android:layout_height="wrap_content"
                         android:text="Coins: 0"
                         android:textSize="14sp"/>
+
+                    <TextView
+                        android:id="@+id/totalScore"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Score: 0"
+                        android:textSize="14sp"/>
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
@@ -140,6 +147,87 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingTop="16dp">
+
+            <!-- RANKING SECTION -->
+            <LinearLayout
+                android:orientation="vertical"
+                android:padding="16dp"
+                android:background="#EEEEEE"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp">
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:text="🏆"
+                        android:textSize="24sp"
+                        android:layout_marginRight="8dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                    <TextView
+                        android:text="Global Ranking"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginTop="8dp">
+
+                    <!-- Header -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:padding="4dp">
+                        <TextView android:text="#" android:textStyle="bold" android:layout_width="30dp" android:layout_height="wrap_content"/>
+                        <TextView android:text="User" android:textStyle="bold" android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content"/>
+                        <TextView android:text="Score" android:textStyle="bold" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+                    </LinearLayout>
+
+                    <!-- Rank 1 -->
+                    <LinearLayout android:id="@+id/rank1Container" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:padding="4dp">
+                        <TextView android:id="@+id/rank1Pos" android:text="1" android:layout_width="30dp" android:layout_height="wrap_content"/>
+                        <TextView android:id="@+id/rank1User" android:text="-" android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content"/>
+                        <TextView android:id="@+id/rank1Score" android:text="-" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+                    </LinearLayout>
+
+                    <!-- Rank 2 -->
+                    <LinearLayout android:id="@+id/rank2Container" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:padding="4dp">
+                        <TextView android:id="@+id/rank2Pos" android:text="2" android:layout_width="30dp" android:layout_height="wrap_content"/>
+                        <TextView android:id="@+id/rank2User" android:text="-" android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content"/>
+                        <TextView android:id="@+id/rank2Score" android:text="-" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+                    </LinearLayout>
+
+                    <!-- Rank 3 -->
+                    <LinearLayout android:id="@+id/rank3Container" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:padding="4dp">
+                        <TextView android:id="@+id/rank3Pos" android:text="3" android:layout_width="30dp" android:layout_height="wrap_content"/>
+                        <TextView android:id="@+id/rank3User" android:text="-" android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content"/>
+                        <TextView android:id="@+id/rank3Score" android:text="-" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+                    </LinearLayout>
+
+                    <!-- Divider -->
+                    <View android:id="@+id/rankDivider" android:layout_width="match_parent" android:layout_height="1dp" android:background="#999" android:layout_marginTop="4dp" android:layout_marginBottom="4dp" android:visibility="gone"/>
+
+                    <!-- User Rank -->
+                    <LinearLayout android:id="@+id/rankUserContainer" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:padding="4dp" android:visibility="gone">
+                        <TextView android:id="@+id/rankUserPos" android:text="-" android:layout_width="30dp" android:layout_height="wrap_content"/>
+                        <TextView android:id="@+id/rankUserUser" android:text="-" android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content"/>
+                        <TextView android:id="@+id/rankUserScore" android:text="-" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+                    </LinearLayout>
+
+                </LinearLayout>
+            </LinearLayout>
 
             <LinearLayout
                 android:orientation="vertical"

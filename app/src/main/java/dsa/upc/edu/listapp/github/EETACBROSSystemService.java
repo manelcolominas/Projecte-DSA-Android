@@ -1,6 +1,7 @@
 package dsa.upc.edu.listapp.github;
 
 import java.util.List;
+
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
@@ -30,4 +31,6 @@ public interface EETACBROSSystemService {
     @DELETE("eetacbros/user/delete/{id}")
     Call<Void> deleteUser(@Path("id") int id);
 
+    @GET("eetacbros/ranking/{userId}")
+    Call<RankingResponse> getRanking(@Path("userId") int userId);
 }

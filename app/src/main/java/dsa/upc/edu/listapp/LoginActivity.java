@@ -67,6 +67,7 @@ public class LoginActivity extends AppCompatActivity {
                         editor.putString("email", user.email);
                         editor.putString("password", user.password);
                         editor.putInt("coins", user.coins);
+                        editor.putInt("score", user.score);
                     }
                     editor.putBoolean("isLoggedIn", true);
                     editor.commit();

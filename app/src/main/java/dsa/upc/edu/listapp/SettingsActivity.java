@@ -98,8 +98,10 @@ public class SettingsActivity extends AppCompatActivity {
 
         String password = prefs.getString("password", null); // Retrieve existing password
         int coins = prefs.getInt("coins", 0); // Retrieve existing coins
+        int score = prefs.getInt("score", 0); // Retrieve existing score
 
-        User updatedUser = new User(userId, newUsername, newName, newEmail, password, coins);
+
+        User updatedUser = new User(userId, newUsername, newName, newEmail, password, coins, score);
 
         api.updateUser(updatedUser).enqueue(new Callback<User>() {
             @Override
