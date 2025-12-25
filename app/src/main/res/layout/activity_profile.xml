@@ -133,12 +133,33 @@
 
             </LinearLayout>
 
-            <Button
-                android:id="@+id/logoutBtn"
+            <!-- SECOND ROW BUTTONS -->
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Log Out"
-                android:layout_marginTop="8dp" />
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:weightSum="2"
+                android:layout_marginTop="8dp">
+
+                <Button
+                    android:id="@+id/faqBtn"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="❓ FAQ"
+                    android:layout_marginEnd="4dp"/>
+
+                <Button
+                    android:id="@+id/logoutBtn"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Log Out"
+                    android:layout_marginStart="4dp"/>
+
+            </LinearLayout>
+
         </LinearLayout>
 
         <!-- CONTENT GRID -->
@@ -195,26 +216,12 @@
                         <TextView android:text="Score" android:textStyle="bold" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
                     </LinearLayout>
 
-                    <!-- Rank 1 -->
-                    <LinearLayout android:id="@+id/rank1Container" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:padding="4dp">
-                        <TextView android:id="@+id/rank1Pos" android:text="1" android:layout_width="30dp" android:layout_height="wrap_content"/>
-                        <TextView android:id="@+id/rank1User" android:text="-" android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content"/>
-                        <TextView android:id="@+id/rank1Score" android:text="-" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
-                    </LinearLayout>
-
-                    <!-- Rank 2 -->
-                    <LinearLayout android:id="@+id/rank2Container" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:padding="4dp">
-                        <TextView android:id="@+id/rank2Pos" android:text="2" android:layout_width="30dp" android:layout_height="wrap_content"/>
-                        <TextView android:id="@+id/rank2User" android:text="-" android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content"/>
-                        <TextView android:id="@+id/rank2Score" android:text="-" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
-                    </LinearLayout>
-
-                    <!-- Rank 3 -->
-                    <LinearLayout android:id="@+id/rank3Container" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:padding="4dp">
-                        <TextView android:id="@+id/rank3Pos" android:text="3" android:layout_width="30dp" android:layout_height="wrap_content"/>
-                        <TextView android:id="@+id/rank3User" android:text="-" android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content"/>
-                        <TextView android:id="@+id/rank3Score" android:text="-" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
-                    </LinearLayout>
+                    <!-- Dynamic Ranking List -->
+                    <LinearLayout
+                        android:id="@+id/rankingListContainer"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical" />
 
                     <!-- Divider -->
                     <View android:id="@+id/rankDivider" android:layout_width="match_parent" android:layout_height="1dp" android:background="#999" android:layout_marginTop="4dp" android:layout_marginBottom="4dp" android:visibility="gone"/>

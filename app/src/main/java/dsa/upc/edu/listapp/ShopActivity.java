@@ -22,6 +22,8 @@ import dsa.upc.edu.listapp.github.BuyRequest;
 import dsa.upc.edu.listapp.github.BuyResponse;
 import dsa.upc.edu.listapp.github.EETACBROSSystemService;
 import dsa.upc.edu.listapp.github.Item;
+import dsa.upc.edu.listapp.github.LoginRequest;
+import dsa.upc.edu.listapp.github.User;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -50,7 +52,7 @@ public class ShopActivity extends AppCompatActivity {
         setContentView(R.layout.activity_shop);
 
         prefs = getSharedPreferences("EETACBROSPreferences", MODE_PRIVATE);
-        coins = prefs.getInt("coins", 0);
+        // coins = prefs.getInt("coins", 0); // No longer trusted source
 
         cartIcon = findViewById(R.id.cartIcon);
         logoutBtn = findViewById(R.id.logoutBtn);
@@ -59,11 +61,9 @@ public class ShopActivity extends AppCompatActivity {
         cartCount = findViewById(R.id.cartCount);
         coinsTextView = findViewById(R.id.coins);
 
-        updateCoinsDisplay();
-
         api = API.getGithub();
 
-        // Load items from backend
+        loadUserData(); // To get coins
         loadShopItems();
 
         // Set button listeners
@@ -71,6 +71,42 @@ public class ShopActivity extends AppCompatActivity {
 
         logoutBtn.setOnClickListener(v -> logOut());
         profileBtn.setOnClickListener(v -> gotToProfile());
+    }
+
+    private void loadUserData() {
+        int userId = getUserIdSafely();
+        if (userId == -1) {
+            Toast.makeText(this, "User not logged in properly", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // Use stored credentials to re-login and get fresh user data
+        String u = prefs.getString("username", null);
+        String p = prefs.getString("password", null);
+
+        if (u != null && p != null) {
+            LoginRequest req = new LoginRequest(u, p);
+            api.loginUser(req).enqueue(new Callback<User>() {
+                @Override
+                public void onResponse(Call<User> call, Response<User> response) {
+                    if (response.isSuccessful() && response.body() != null) {
+                        coins = response.body().coins;
+                        updateCoinsDisplay();
+                    } else {
+                        // Fallback to 0 or error
+                        coins = 0;
+                        updateCoinsDisplay();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<User> call, Throwable t) {
+                    // Fallback to 0 or error
+                    coins = 0;
+                    updateCoinsDisplay();
+                }
+            });
+        }
     }
 
     private void logOut() {
@@ -285,9 +321,10 @@ public class ShopActivity extends AppCompatActivity {
                     coins -= finalTotalCost;
                     updateCoinsDisplay();
 
-                    SharedPreferences.Editor editor = prefs.edit();
-                    editor.putInt("coins", coins);
-                    editor.commit();
+                    // No longer update SharedPreferences for coins
+                    // SharedPreferences.Editor editor = prefs.edit();
+                    // editor.putInt("coins", coins);
+                    // editor.commit();
 
                     // Clear cart
                     cart.clear();

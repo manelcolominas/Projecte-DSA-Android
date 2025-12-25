@@ -33,4 +33,7 @@ public interface EETACBROSSystemService {
 
     @GET("eetacbros/ranking/{userId}")
     Call<RankingResponse> getRanking(@Path("userId") int userId);
+
+    @GET("eetacbros/faqs")
+    Call<List<FAQ>> getFAQs();
 }

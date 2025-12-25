@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -20,8 +21,10 @@ import java.util.List;
 import dsa.upc.edu.listapp.github.API;
 import dsa.upc.edu.listapp.github.EETACBROSSystemService;
 import dsa.upc.edu.listapp.github.Item;
+import dsa.upc.edu.listapp.github.LoginRequest;
 import dsa.upc.edu.listapp.github.RankingResponse;
 import dsa.upc.edu.listapp.github.RankingUser;
+import dsa.upc.edu.listapp.github.User;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -31,7 +34,7 @@ public class ProfileActivity extends AppCompatActivity {
     private EETACBROSSystemService api;
     private SharedPreferences prefs;
 
-    private Button gamesBtn, settingsBtn, logoutBtn, shopBtn;
+    private Button gamesBtn, settingsBtn, logoutBtn, shopBtn, faqBtn;
 
     private TextView usernameTextView, coinsTextView, scoreTextView;
     private RecyclerView inventoryRecycler;
@@ -39,12 +42,7 @@ public class ProfileActivity extends AppCompatActivity {
     private RecyclerView.LayoutManager layoutManager;
 
     // Ranking Views
-    private TextView rank1Pos, rank1User, rank1Score;
-    private LinearLayout rank1Container;
-    private TextView rank2Pos, rank2User, rank2Score;
-    private LinearLayout rank2Container;
-    private TextView rank3Pos, rank3User, rank3Score;
-    private LinearLayout rank3Container;
+    private LinearLayout rankingListContainer;
     private View rankDivider;
     private TextView rankUserPos, rankUserUser, rankUserScore;
     private LinearLayout rankUserContainer;
@@ -62,6 +60,7 @@ public class ProfileActivity extends AppCompatActivity {
         gamesBtn = findViewById(R.id.gamesBtn);
         settingsBtn = findViewById(R.id.settingsBtn);
         shopBtn = findViewById(R.id.shopBtn);
+        faqBtn = findViewById(R.id.faqBtn);
         logoutBtn = findViewById(R.id.logoutBtn);
         inventoryRecycler = findViewById(R.id.inventoryRecycler);
         usernameTextView = findViewById(R.id.username);
@@ -70,20 +69,7 @@ public class ProfileActivity extends AppCompatActivity {
 
 
         // Ranking Bindings
-        rank1Pos = findViewById(R.id.rank1Pos);
-        rank1User = findViewById(R.id.rank1User);
-        rank1Score = findViewById(R.id.rank1Score);
-        rank1Container = findViewById(R.id.rank1Container);
-
-        rank2Pos = findViewById(R.id.rank2Pos);
-        rank2User = findViewById(R.id.rank2User);
-        rank2Score = findViewById(R.id.rank2Score);
-        rank2Container = findViewById(R.id.rank2Container);
-
-        rank3Pos = findViewById(R.id.rank3Pos);
-        rank3User = findViewById(R.id.rank3User);
-        rank3Score = findViewById(R.id.rank3Score);
-        rank3Container = findViewById(R.id.rank3Container);
+        rankingListContainer = findViewById(R.id.rankingListContainer);
 
         rankDivider = findViewById(R.id.rankDivider);
 
@@ -103,8 +89,6 @@ public class ProfileActivity extends AppCompatActivity {
 
         api = API.getGithub();
 
-        loadUserData();
-
         if (logoutBtn != null) {
             logoutBtn.setOnClickListener(v -> logOut());
         }
@@ -120,26 +104,30 @@ public class ProfileActivity extends AppCompatActivity {
                 startActivity(intent);
             });
         }
+        if (faqBtn != null) {
+            faqBtn.setOnClickListener(v -> {
+                Intent intent = new Intent(ProfileActivity.this, FAQActivity.class);
+                startActivity(intent);
+            });
+        }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        updateProfileDisplay();
+        loadUserData();
     }
 
-    private void updateProfileDisplay() {
-        String username = prefs.getString("username", "Unknown");
-        int coins = prefs.getInt("coins", 0);
-        int score = prefs.getInt("score", 0);
+    private void updateProfileDisplay(User user) {
+        if (user == null) return;
         if (usernameTextView != null) {
-            usernameTextView.setText(username);
+            usernameTextView.setText(user.username);
         }
         if (coinsTextView != null) {
-            coinsTextView.setText("Coins: " + coins);
+            coinsTextView.setText("Coins: " + user.coins);
         }
         if (scoreTextView != null) {
-            scoreTextView.setText("Score: " + score);
+            scoreTextView.setText("Score: " + user.score);
         }
     }
 
@@ -151,12 +139,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     private void logOut() {
         SharedPreferences.Editor editor = prefs.edit();
-        editor.remove("username");
-        editor.remove("password");
-        editor.remove("coins");
-        editor.putInt("userId", -1);
-        editor.putBoolean("isLoggedIn", false);
-        editor.commit();
+        editor.clear();
         editor.apply();
 
         Intent intent = new Intent(ProfileActivity.this, LoginActivity.class);
@@ -187,12 +170,34 @@ public class ProfileActivity extends AppCompatActivity {
 
     private void loadUserData() {
         int userId = getUserIdSafely();
-        if (userId == -1) {
-            Toast.makeText(ProfileActivity.this, "Error: User not logged in", Toast.LENGTH_SHORT).show();
-            return;
+        if (userId == -1) return;
+
+        // Use stored credentials to re-login and get fresh user data
+        String u = prefs.getString("username", null);
+        String p = prefs.getString("password", null);
+
+        if (u != null && p != null) {
+            LoginRequest req = new LoginRequest(u, p);
+            api.loginUser(req).enqueue(new Callback<User>() {
+                @Override
+                public void onResponse(Call<User> call, Response<User> response) {
+                    if (response.isSuccessful() && response.body() != null) {
+                        User user = response.body();
+                        updateProfileDisplay(user);
+                        loadRanking(userId, user.username);
+                    } else {
+                        Log.e(TAG, "Failed to refresh user data via login");
+                        // Optionally handle logout if credentials invalid
+                    }
+                }
+                @Override
+                public void onFailure(Call<User> call, Throwable t) {
+                    Log.e(TAG, "Connection error refreshing user data", t);
+                }
+            });
         }
 
-        // Load Items
+        // 2. Load Items
         api.getUserItems(userId).enqueue(new Callback<List<Item>>() {
             @Override
             public void onResponse(Call<List<Item>> call, Response<List<Item>> response) {
@@ -208,17 +213,11 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<List<Item>> call, Throwable t) {
                 Log.e(TAG, "Connection error", t);
-                Toast.makeText(ProfileActivity.this, "Connection error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
-
-        // Load Ranking
-        loadRanking(userId);
     }
 
-    private void loadRanking(int userId) {
-        String currentUsername = prefs.getString("username", "");
-
+    private void loadRanking(int userId, String currentUsername) {
         api.getRanking(userId).enqueue(new Callback<RankingResponse>() {
             @Override
             public void onResponse(Call<RankingResponse> call, Response<RankingResponse> response) {
@@ -227,35 +226,24 @@ public class ProfileActivity extends AppCompatActivity {
                     List<RankingUser> podium = ranking.podium;
                     RankingUser userEntry = ranking.userEntry;
 
-                    // Clear previous states
-                    rank1User.setText("-"); rank1Score.setText("-"); rank1Container.setBackgroundColor(Color.TRANSPARENT);
-                    rank2User.setText("-"); rank2Score.setText("-"); rank2Container.setBackgroundColor(Color.TRANSPARENT);
-                    rank3User.setText("-"); rank3Score.setText("-"); rank3Container.setBackgroundColor(Color.TRANSPARENT);
+                    if (rankingListContainer != null) {
+                        rankingListContainer.removeAllViews();
+                    }
 
-                    // Fill Podium
                     if (podium != null) {
-                        if (podium.size() > 0) {
-                            setupRankRow(podium.get(0), rank1User, rank1Score, rank1Container, currentUsername);
-                        }
-                        if (podium.size() > 1) {
-                            setupRankRow(podium.get(1), rank2User, rank2Score, rank2Container, currentUsername);
-                        }
-                        if (podium.size() > 2) {
-                            setupRankRow(podium.get(2), rank3User, rank3Score, rank3Container, currentUsername);
+                        for (RankingUser user : podium) {
+                            addRankRow(user, currentUsername);
                         }
                     }
 
-                    // Handle User Entry
                     if (userEntry != null) {
                         rankDivider.setVisibility(View.VISIBLE);
                         rankUserContainer.setVisibility(View.VISIBLE);
                         rankUserPos.setText(String.valueOf(userEntry.position));
                         rankUserUser.setText(userEntry.username);
                         rankUserScore.setText(String.valueOf(userEntry.score));
-                        // Highlight user entry container just to be sure
                         rankUserContainer.setBackgroundColor(Color.parseColor("#E0F7FA"));
                     } else {
-                        // User is in podium or no data
                         rankDivider.setVisibility(View.GONE);
                         rankUserContainer.setVisibility(View.GONE);
                     }
@@ -272,13 +260,26 @@ public class ProfileActivity extends AppCompatActivity {
         });
     }
 
-    private void setupRankRow(RankingUser user, TextView nameView, TextView scoreView, LinearLayout container, String currentUsername) {
-        nameView.setText(user.username);
-        scoreView.setText(String.valueOf(user.score));
+    private void addRankRow(RankingUser user, String currentUsername) {
+        if (rankingListContainer == null) return;
+        
+        View row = LayoutInflater.from(ProfileActivity.this).inflate(R.layout.item_ranking_row, rankingListContainer, false);
+        
+        TextView pos = row.findViewById(R.id.rowPos);
+        TextView name = row.findViewById(R.id.rowUser);
+        TextView score = row.findViewById(R.id.rowScore);
+        LinearLayout container = row.findViewById(R.id.rowContainer);
+
+        pos.setText(String.valueOf(user.position));
+        name.setText(user.username);
+        score.setText(String.valueOf(user.score));
+
         if (user.username.equals(currentUsername)) {
-            container.setBackgroundColor(Color.parseColor("#E0F7FA")); // Light Cyan for highlight
+            container.setBackgroundColor(Color.parseColor("#E0F7FA")); 
         } else {
             container.setBackgroundColor(Color.TRANSPARENT);
         }
+        
+        rankingListContainer.addView(row);
     }
 }

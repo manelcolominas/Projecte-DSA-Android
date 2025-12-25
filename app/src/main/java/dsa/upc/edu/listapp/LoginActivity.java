@@ -47,10 +47,10 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void loginUser() {
-        LoginRequest request = new LoginRequest(
-                etUsername.getText().toString(),
-                etPassword.getText().toString()
-        );
+        String username = etUsername.getText().toString();
+        String password = etPassword.getText().toString();
+
+        LoginRequest request = new LoginRequest(username, password);
 
         EETACBROSSystemService api = API.getGithub();
 
@@ -62,12 +62,9 @@ public class LoginActivity extends AppCompatActivity {
                     SharedPreferences.Editor editor = prefs.edit();
                     if (user != null) {
                         editor.putInt("userId", user.id);
-                        editor.putString("username", user.username);
-                        editor.putString("name", user.name);
-                        editor.putString("email", user.email);
-                        editor.putString("password", user.password);
-                        editor.putInt("coins", user.coins);
-                        editor.putInt("score", user.score);
+                        // Store credentials for silent login/refresh
+                        editor.putString("username", username);
+                        editor.putString("password", password);
                     }
                     editor.putBoolean("isLoggedIn", true);
                     editor.commit();

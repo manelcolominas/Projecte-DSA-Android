@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import dsa.upc.edu.listapp.github.API;
 import dsa.upc.edu.listapp.github.EETACBROSSystemService;
+import dsa.upc.edu.listapp.github.LoginRequest;
 import dsa.upc.edu.listapp.github.User;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -26,6 +27,9 @@ public class SettingsActivity extends AppCompatActivity {
 
     private EditText usernameEditText, emailEditText, nameEditText, currentPasswordEditText, newPasswordEditText, confirmPasswordEditText;
     private Button profileBtn, clearBtn, saveBtn, deleteAccountBtn;
+
+    // Cache the original user data to update
+    private User currentUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,17 +61,41 @@ public class SettingsActivity extends AppCompatActivity {
 
         deleteAccountBtn.setOnClickListener(v -> deleteAccount());
 
-        loadUserSettings();
+        loadUserData();
     }
 
-    private void loadUserSettings() {
-        String username = prefs.getString("username", "");
-        String email = prefs.getString("email", "");
-        String name = prefs.getString("name", "");
+    private void loadUserData() {
+        int userId = getUserIdSafely();
+        if (userId == -1) {
+            Toast.makeText(this, "Error: User not logged in", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
-        usernameEditText.setText(username);
-        emailEditText.setText(email);
-        nameEditText.setText(name);
+        String u = prefs.getString("username", null);
+        String p = prefs.getString("password", null);
+
+        if (u != null && p != null) {
+            LoginRequest req = new LoginRequest(u, p);
+            api.loginUser(req).enqueue(new Callback<User>() {
+                @Override
+                public void onResponse(Call<User> call, Response<User> response) {
+                    if (response.isSuccessful() && response.body() != null) {
+                        currentUser = response.body();
+                        usernameEditText.setText(currentUser.username);
+                        emailEditText.setText(currentUser.email);
+                        nameEditText.setText(currentUser.name);
+                    } else {
+                        Toast.makeText(SettingsActivity.this, "Failed to load user data", Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<User> call, Throwable t) {
+                    Log.e(TAG, "Connection error", t);
+                    Toast.makeText(SettingsActivity.this, "Connection error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
     }
 
     private void goToProfile() {
@@ -86,34 +114,38 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     private void saveChanges() {
-        String newUsername = usernameEditText.getText().toString();
-        String newEmail = emailEditText.getText().toString();
-        String newName = nameEditText.getText().toString();
-        int userId = getUserIdSafely();
-
-        if (userId == -1) {
-            Toast.makeText(this, "Error: User not logged in", Toast.LENGTH_SHORT).show();
+        if (currentUser == null) {
+            Toast.makeText(this, "User data not loaded yet", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        String password = prefs.getString("password", null); // Retrieve existing password
-        int coins = prefs.getInt("coins", 0); // Retrieve existing coins
-        int score = prefs.getInt("score", 0); // Retrieve existing score
+        String newUsername = usernameEditText.getText().toString();
+        String newEmail = emailEditText.getText().toString();
+        String newName = nameEditText.getText().toString();
+        int userId = currentUser.id;
 
+        // Use current password unless user wants to change it
+        String password = currentUser.password; 
+        
+        // TODO: Handle password change logic if fields are filled (not implemented in original code properly but structure exists)
+        // For now, we preserve the existing password from the fetched user object.
 
-        User updatedUser = new User(userId, newUsername, newName, newEmail, password, coins, score);
+        User updatedUser = new User(userId, newUsername, newName, newEmail, password, currentUser.coins, currentUser.score);
 
         api.updateUser(updatedUser).enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     Toast.makeText(SettingsActivity.this, "User data updated successfully!", Toast.LENGTH_SHORT).show();
-                    // Update SharedPreferences with new data
+                    currentUser = response.body();
+                    // We don't update SharedPreferences anymore for user data, EXCEPT CREDENTIALS if they changed
                     SharedPreferences.Editor editor = prefs.edit();
-                    editor.putString("username", response.body().username);
-                    editor.putString("email", response.body().email);
-                    editor.putString("name", response.body().name);
+                    editor.putString("username", currentUser.username);
+                    if (!currentUser.password.equals(password)) { // Simplified check, ideally check against new password field if implemented
+                         editor.putString("password", currentUser.password);
+                    }
                     editor.apply();
+
                 } else {
                     Toast.makeText(SettingsActivity.this, "Failed to update user data.", Toast.LENGTH_SHORT).show();
                 }

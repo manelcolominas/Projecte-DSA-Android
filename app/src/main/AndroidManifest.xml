@@ -31,6 +31,7 @@
         <activity android:name=".RegisterActivity"/>
 
         <activity android:name=".ShopActivity"/>
+        <activity android:name=".FAQActivity"/>
     </application>
 
 </manifest>
