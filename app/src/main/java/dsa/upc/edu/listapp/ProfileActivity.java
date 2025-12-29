@@ -28,13 +28,14 @@ import dsa.upc.edu.listapp.github.User;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import com.unity3d.player.UnityPlayerGameActivity;
 
 public class ProfileActivity extends AppCompatActivity {
     private static final String TAG = "ProfileActivity";
     private EETACBROSSystemService api;
     private SharedPreferences prefs;
 
-    private Button gamesBtn, settingsBtn, logoutBtn, shopBtn, faqBtn;
+    private Button gamesBtn, settingsBtn, logoutBtn, shopBtn, faqBtn, playBtn;
 
     private TextView usernameTextView, coinsTextView, scoreTextView;
     private RecyclerView inventoryRecycler;
@@ -62,6 +63,7 @@ public class ProfileActivity extends AppCompatActivity {
         shopBtn = findViewById(R.id.shopBtn);
         faqBtn = findViewById(R.id.faqBtn);
         logoutBtn = findViewById(R.id.logoutBtn);
+        playBtn = findViewById(R.id.playBtn);
         inventoryRecycler = findViewById(R.id.inventoryRecycler);
         usernameTextView = findViewById(R.id.username);
         coinsTextView = findViewById(R.id.totalCoins);
@@ -107,6 +109,13 @@ public class ProfileActivity extends AppCompatActivity {
         if (faqBtn != null) {
             faqBtn.setOnClickListener(v -> {
                 Intent intent = new Intent(ProfileActivity.this, FAQActivity.class);
+                startActivity(intent);
+            });
+        }
+        if (playBtn != null) {
+            playBtn.setOnClickListener(v -> {
+                Intent intent = new Intent(ProfileActivity.this, UnityPlayerGameActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 startActivity(intent);
             });
         }
