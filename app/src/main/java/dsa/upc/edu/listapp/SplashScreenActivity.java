@@ -26,7 +26,6 @@ public class SplashScreenActivity extends AppCompatActivity {
 
         final Handler handler = new Handler();
         handler.postDelayed(() -> {
-            goToProfile();
             if (userId != -1) {
                 goToProfile();
             } else {

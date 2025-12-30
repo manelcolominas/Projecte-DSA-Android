@@ -1,0 +1,83 @@
+Per exportar el projecte a Unity:
+	- Obrir el projecte Unity.
+	- Assegurar-se que estàs dins l'escenari que vols exportar.
+	- Anar a File > Build Settings.
+	- Seleccionar Android i prem Switch Platform (si no està en Active).
+	- Desactiver la casella Build App Bundle (Google Play) si està activada (no surt la opció si la casella Export Project està activada).
+	- Activar la casella Export Project.
+	- Premer el botó Player Settings (part superior dreta de la finestra) i a l'apartat d'Android Settings:
+		- Identification: Comprovar que el Package Name sigui dsa.upc.edu.unity
+		- Minimum API Level: Posar-ho a 23.
+		- Target API Level: Posar-ho a 33 (per coincidir amb el projecte).
+		- Scripting Backend: Seleccionar IL2CPP.
+		- Target Architectures: Marcar ARMv7 i ARM64.
+		- Comprovar que el Active Input Handling està posat a Input System Package (New).
+		- Tancar la finestra del Player Settings
+	- A la mateixa finestra de Build Settings, premer Export. Triar o crear una carpeta buida.
+
+Possibles problemes:
+	- Si en algun script tens errors, no et deixarà exportar.
+	- El script TilemapDebugger no es pot exportar, s'ha de borrar o comentar-lo tot.
+
+Un cop es té el projecte exportat, copiar la carpeta unityLibrary i shared a la carpeta arrel del projecte d'Android.
+
+Modificacions dels fitxers de la carpeta unityLibrary:
+	- Obrir unityLibrary/build.gradle
+	- Revisar el bloc android { ... } per si conté les següents línies:
+
+android {
+    namespace "com.unity3d.player"
+    compileSdkVersion 33
+    
+    defaultConfig {
+        minSdkVersion 23
+        targetSdkVersion 33
+        // ...
+    }
+}
+
+	- Buscar el bloc androidResources { ... }. Si a dins hi ha noCompress = [...], canviar-ho per:
+
+androidResources {
+    ignoreAssetsPattern = "!.svn:!.git:!.ds_store:!*.scc:!CVS:!thumbs.db:!picasa.ini:!*~"
+    // Modificació de seguretat:
+    def streamingAssets = project.hasProperty('unityStreamingAssets') ? project.property('unityStreamingAssets').toString().tokenize(', ') : []
+    noCompress = ['.unity3d', '.ress', '.resource', '.obb', '.bundle', '.unityexp'] + streamingAssets
+}
+
+	- Modificar el fitxer local.properties perquè tingui les següents línies (si el fitxer no és a l'arrel del projecte, crear-lo i posar-hi les línies):
+
+sdk.dir=C\:/Users/EL_TEU_USUARI/AppData/Local/Android/Sdk
+unity.androidNdkPath=C\:/Program Files/Unity/Hub/Editor/6000.2.13f1/Editor/Data/PlaybackEngines/AndroidPlayer/NDK
+unity.androidSdkPath=C\:/Users/EL_TEU_USUARI/AppData/Local/Android/Sdk
+
+	- Obviament canviar el "EL_TEU_USUARI" pel nom de l'usuari de l'ordinador
+
+	- Modificar el fitxer unityLibrary/src/main/AndroidManifest.xml:
+		- Buscar el bloc <activity ...> i substituir-lo tot per:
+
+<activity android:name="com.unity3d.player.UnityPlayerGameActivity"
+    android:theme="@style/BaseUnityGameActivityTheme"
+    android:configChanges="mcc|mnc|locale|touchscreen|keyboard|keyboardHidden|navigation|orientation|screenLayout|uiMode|screenSize|smallestScreenSize|fontScale|layoutDirection|density"
+    android:hardwareAccelerated="true"
+    android:launchMode="singleTop"
+    android:screenOrientation="landscape"
+    android:exported="false"> 
+
+    <meta-data android:name="unityplayer.UnityActivity" android:value="true" />
+    <meta-data android:name="android.app.lib_name" android:value="game" />
+    <meta-data android:name="notch_support" android:value="true" />
+</activity>
+
+
+
+
+
+
+
+
+
+
+
+
+
