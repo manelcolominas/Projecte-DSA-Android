@@ -3,7 +3,7 @@ apply from: '../shared/keepUnitySymbols.gradle'
 apply from: '../shared/common.gradle'
 
 dependencies {
-    api fileTree(dir: 'libs', include: ['*.jar'])
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'androidx.core:core:1.9.0'
     implementation 'androidx.games:games-activity:3.0.5'
@@ -46,12 +46,12 @@ android {
         abortOnError false
     }
 
-    androidResources {
-        ignoreAssetsPattern = "!.svn:!.git:!.ds_store:!*.scc:!CVS:!thumbs.db:!picasa.ini:!*~"
-        // Modificació de seguretat:
-        def streamingAssets = project.hasProperty('unityStreamingAssets') ? project.property('unityStreamingAssets').toString().tokenize(', ') : []
-        noCompress = ['.unity3d', '.ress', '.resource', '.obb', '.bundle', '.unityexp'] + streamingAssets
-    }
+ androidResources {
+    ignoreAssetsPattern = "!.svn:!.git:!.ds_store:!*.scc:!CVS:!thumbs.db:!picasa.ini:!*~"
+    // Modificació de seguretat:
+    def streamingAssets = project.hasProperty('unityStreamingAssets') ? project.property('unityStreamingAssets').toString().tokenize(', ') : []
+    noCompress = ['.unity3d', '.ress', '.resource', '.obb', '.bundle', '.unityexp'] + streamingAssets
+}
 
     packaging {
         jniLibs {

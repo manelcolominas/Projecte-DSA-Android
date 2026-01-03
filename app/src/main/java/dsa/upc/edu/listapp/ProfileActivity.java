@@ -114,7 +114,7 @@ public class ProfileActivity extends AppCompatActivity {
         }
         if (playBtn != null) {
             playBtn.setOnClickListener(v -> {
-                Intent intent = new Intent(ProfileActivity.this, UnityPlayerGameActivity.class);
+                Intent intent = new Intent(ProfileActivity.this, GameActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 startActivity(intent);
             });

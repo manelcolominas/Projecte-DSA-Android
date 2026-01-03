@@ -24,6 +24,7 @@ Un cop es té el projecte exportat, copiar la carpeta unityLibrary i shared a la
 Modificacions dels fitxers de la carpeta unityLibrary:
 	- Obrir unityLibrary/build.gradle
 	- Revisar el bloc android { ... } per si conté les següents línies:
+		(Pot ser que no hi hagi lo de "Version" al "compileSdkVersion" ni als altres, però és el mateix)
 
 android {
     namespace "com.unity3d.player"
@@ -45,39 +46,28 @@ androidResources {
     noCompress = ['.unity3d', '.ress', '.resource', '.obb', '.bundle', '.unityexp'] + streamingAssets
 }
 
-	- Modificar el fitxer local.properties perquè tingui les següents línies (si el fitxer no és a l'arrel del projecte, crear-lo i posar-hi les línies):
+	- Modificar el fitxer gradle.properties perquè tingui les següents línies:
 
-sdk.dir=C\:/Users/EL_TEU_USUARI/AppData/Local/Android/Sdk
 unity.androidNdkPath=C\:/Program Files/Unity/Hub/Editor/6000.2.13f1/Editor/Data/PlaybackEngines/AndroidPlayer/NDK
 unity.androidSdkPath=C\:/Users/EL_TEU_USUARI/AppData/Local/Android/Sdk
 
-	- Obviament canviar el "EL_TEU_USUARI" pel nom de l'usuari de l'ordinador
+	- Obviament, canviar el "EL_TEU_USUARI" pel nom de l'usuari de l'ordinador
 
 	- Modificar el fitxer unityLibrary/src/main/AndroidManifest.xml:
 		- Buscar el bloc <activity ...> i substituir-lo tot per:
 
 <activity android:name="com.unity3d.player.UnityPlayerGameActivity"
-    android:theme="@style/BaseUnityGameActivityTheme"
-    android:configChanges="mcc|mnc|locale|touchscreen|keyboard|keyboardHidden|navigation|orientation|screenLayout|uiMode|screenSize|smallestScreenSize|fontScale|layoutDirection|density"
-    android:hardwareAccelerated="true"
-    android:launchMode="singleTop"
-    android:screenOrientation="landscape"
-    android:exported="false"> 
+  android:theme="@style/BaseUnityGameActivityTheme"
+  android:configChanges="mcc|mnc|locale|touchscreen|keyboard|keyboardHidden|navigation|orientation|screenLayout|uiMode|screenSize|smallestScreenSize|fontScale|layoutDirection|density"
+  android:hardwareAccelerated="true"
+  android:launchMode="singleTop"
+  android:screenOrientation="landscape"
+  android:exported="false"> 
 
-    <meta-data android:name="unityplayer.UnityActivity" android:value="true" />
-    <meta-data android:name="android.app.lib_name" android:value="game" />
-    <meta-data android:name="notch_support" android:value="true" />
+  <meta-data android:name="unityplayer.UnityActivity" android:value="true" />
+  <meta-data android:name="android.app.lib_name" android:value="game" />
+  <meta-data android:name="notch_support" android:value="true" />
 </activity>
 
 
-
-
-
-
-
-
-
-
-
-
-
+Quan es prem al botó de Play pot arribar a tardar més de 15 minuts per fer el build!

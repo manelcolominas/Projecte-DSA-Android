@@ -6,9 +6,9 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class API {
-    final static String URL = "http://10.0.2.2:8080/example/";
+    //final static String URL = "http://10.0.2.2:8080/example/";
 
-    //final static String URL = "http://dsa3.upc.edu/example/";
+    final static String URL = "http://dsa3.upc.edu/example/";
 
 
     private static Retrofit retrofit;

@@ -6,8 +6,8 @@ public class User {
     public final String name;
     public final String email;
     public final String password;
-    public final int coins;
-    public final int score;
+    public int coins;
+    public int score;
 
 
     public User(int id, String username, String name, String email, String password, int coins, int score) {

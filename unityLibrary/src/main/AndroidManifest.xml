@@ -15,17 +15,17 @@
     <meta-data android:name="unity.auto-report-fully-drawn" android:value="true" />
     <meta-data android:name="unity.strip-engine-code" android:value="true" />
     <meta-data android:name="unity.auto-set-game-state" android:value="true" />
-      <activity android:name="com.unity3d.player.UnityPlayerGameActivity"
-          android:theme="@style/BaseUnityGameActivityTheme"
-          android:configChanges="mcc|mnc|locale|touchscreen|keyboard|keyboardHidden|navigation|orientation|screenLayout|uiMode|screenSize|smallestScreenSize|fontScale|layoutDirection|density"
-          android:hardwareAccelerated="true"
-          android:launchMode="singleTop"
-          android:screenOrientation="landscape"
-          android:exported="false">
+    <activity android:name="com.unity3d.player.UnityPlayerGameActivity"
+      android:theme="@style/BaseUnityGameActivityTheme"
+      android:configChanges="mcc|mnc|locale|touchscreen|keyboard|keyboardHidden|navigation|orientation|screenLayout|uiMode|screenSize|smallestScreenSize|fontScale|layoutDirection|density"
+      android:hardwareAccelerated="true"
+      android:launchMode="singleTop"
+      android:screenOrientation="landscape"
+      android:exported="false"> 
 
-          <meta-data android:name="unityplayer.UnityActivity" android:value="true" />
-          <meta-data android:name="android.app.lib_name" android:value="game" />
-          <meta-data android:name="notch_support" android:value="true" />
-      </activity>
+      <meta-data android:name="unityplayer.UnityActivity" android:value="true" />
+      <meta-data android:name="android.app.lib_name" android:value="game" />
+      <meta-data android:name="notch_support" android:value="true" />
+    </activity>
   </application>
 </manifest>

@@ -28,6 +28,9 @@ public interface EETACBROSSystemService {
     @PUT("eetacbros/user/update")
     Call<User> updateUser(@Body User user);
 
+    @PUT("eetacbros/user/updateScore")
+    Call<User> updateUserScore(@Body User user);
+
     @DELETE("eetacbros/user/delete/{id}")
     Call<Void> deleteUser(@Path("id") int id);
 
